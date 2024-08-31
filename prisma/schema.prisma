@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum unitMeasure {
+  GRAMS
+  LITERS
+  UNIT
+}
+
+model Makings {
+  id String @id @default(uuid())
+
+  name         String
+  unit         Int
+  unitMeasure  unitMeasure @map("unit_measure")
+  priceInCents Int?        @map("price_in_cents")
+
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  pizzaMaking PizzaMaking[]
+
+  @@map("mkings")
+}
+
+model Pizzas {
+  id String @id @default(uuid())
+
+  name         String
+  priceInCents Int           @map("price_in_cents")
+  description  String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  pizzaMaking  PizzaMaking[]
+  OrdersPizza  OrdersPizza[]
+
+  @@map("pizzas")
+}
+
+model PizzaMaking {
+  id String @id @default(uuid())
+
+  unitMaking Int     @map("unit_making")
+  pizzaId    String
+  makingsId  String
+  pizza      Pizzas  @relation(fields: [pizzaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  making     Makings @relation(fields: [makingsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("pizza_makings")
+}
+
+enum OrderStatus {
+  PENDING
+  DELIVERING
+  DELIVERED
+  CANCELED
+}
+
+model Orders {
+  id String @id @default(uuid())
+
+  status       OrderStatus @default(PENDING)
+  totalInCents Int         @map("total_in_cents")
+
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  OrdersPizza OrdersPizza[]
+
+  @@map("orders")
+}
+
+model OrdersPizza {
+  id String @id @default(uuid())
+
+  unitPizza Int    @map("unit_pizza")
+  order     Orders @relation(fields: [orderId], references: [id])
+  pizza     Pizzas @relation(fields: [pizzaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  orderId String
+  pizzaId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("orders_pizzas")
+}
