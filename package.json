@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "migrate": "prisma migrate dev",
+    "seed": "prisma seed db",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@prisma/client": "^5.19.0",
-    "ky": "^1.7.1",
+    "ky": "^1.7.2",
     "next": "14.2.7",
     "prisma": "^5.19.0",
     "react": "^18",
