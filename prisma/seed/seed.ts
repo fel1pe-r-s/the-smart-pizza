@@ -4,7 +4,7 @@ import { createSeedClient } from "@snaplet/seed";
 const prisma = new PrismaClient();
 
 async function main() {
-  const seed = await createSeedClient();
+  const seed = createSeedClient();
 
   // Truncate all tables in the database
   await seed.$resetDatabase();
