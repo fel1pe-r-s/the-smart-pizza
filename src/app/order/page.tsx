@@ -1,7 +1,5 @@
-import { getMaking } from "@/http/get-making";
-
-import { OrderTableRow } from "@/components/making/making-table-row";
-import { MetricCardSkeleton } from "@/components/making/making-table-skeleton";
+import { OrderTableRow } from "@/components/order/order-table-row";
+import { MetricCardSkeleton } from "@/components/order/order-table-skeleton";
 import {
   Table,
   TableBody,
@@ -9,10 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getOrders } from "@/http/get-orders";
 import { Suspense } from "react";
 
 export default async function Home() {
-  const makings = await getMaking();
+  const { orders } = await getOrders();
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -24,16 +23,17 @@ export default async function Home() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[64px]"></TableHead>
-                  <TableHead className="w-[140px]">Nome</TableHead>
-                  <TableHead className="w-[180px]">Unidades</TableHead>
-                  <TableHead className="w-[40px]">ultima atualização</TableHead>
+                  <TableHead className="w-[140px]">Indentificador</TableHead>
+                  <TableHead className="w-[180px]">Realizador há</TableHead>
+                  <TableHead className="w-[140px]">Status</TableHead>
+                  <TableHead className="w-[140px]">Total do pedido</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {makings ? (
-                  makings.map((making) => (
+                {orders ? (
+                  orders.map((order) => (
                     <Suspense>
-                      <OrderTableRow key={making.id} making={making} />
+                      <OrderTableRow key={order.id} order={order} />
                     </Suspense>
                   ))
                 ) : (

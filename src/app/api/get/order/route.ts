@@ -5,20 +5,24 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const orderId = searchParams.get("order-id");
   if (orderId) {
-    const order = await prisma.orders.findMany({
+    const order = await prisma.orders.findFirst({
       where: {
         id: orderId,
       },
       include: {
-        OrdersPizza: true,
+        OrdersPizza: {
+          include: {
+            pizza: true,
+          },
+        },
       },
     });
-    return Response.json(order);
+    return Response.json({ order });
   }
   const orders = await prisma.orders.findMany({
     include: {
       OrdersPizza: true,
     },
   });
-  return Response.json(orders);
+  return Response.json({ orders });
 }

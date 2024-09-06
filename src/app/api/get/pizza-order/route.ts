@@ -11,14 +11,16 @@ export async function GET(request: NextRequest) {
       },
       include: {
         order: true,
+        pizza: true,
       },
     });
-    return Response.json(ordersPizzas);
+
+    return Response.json({ ordersPizzas });
   }
   const ordersPizza = await prisma.ordersPizza.findMany({
     include: {
       pizza: true,
     },
   });
-  return Response.json(ordersPizza);
+  return Response.json({ ordersPizza });
 }

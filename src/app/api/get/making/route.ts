@@ -9,16 +9,10 @@ export async function GET(request: NextRequest) {
       where: {
         id: makingId,
       },
-      select: {
-        id: true,
-        name: true,
-        unit: true,
-        unitMeasure: true,
-        priceInCents: true,
-      },
     });
-    return Response.json(makings);
+    return Response.json({ makings });
   }
-  const makings = await prisma.makings.findMany();
-  return Response.json(makings);
+  const makings = await prisma.makings.findMany({});
+
+  return Response.json({ makings });
 }

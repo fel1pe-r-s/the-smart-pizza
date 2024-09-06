@@ -1,8 +1,14 @@
 import { PrismaClient } from "@prisma/client";
+import { createSeedClient } from "@snaplet/seed";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const seed = await createSeedClient();
+
+  // Truncate all tables in the database
+  await seed.$resetDatabase();
+
   const making1 = await prisma.makings.create({
     data: {
       name: "massa de pizza",
