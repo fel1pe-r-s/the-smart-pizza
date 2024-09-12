@@ -20,7 +20,7 @@
     "dev": {
       "name": "dev",
       "command": "npm run dev",
-      "runAtStart": true
+      "runAtStart": false
     },
     "migrate": {
       "name": "migrate",
